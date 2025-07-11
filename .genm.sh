@@ -10,7 +10,6 @@ __write_to_Make(){
 
 __add_file(){
     name=${1%.c*}
-    echo $name
     objs="$objs $name.o"
 
     __write_to_Make "$name.o: $name$FILE_TYPE"
@@ -50,7 +49,7 @@ genm() {
         __write_to_Make "TARGET := $Project_Name"
 
         __write_to_Make "%%.o: %%$FILE_TYPE"
-		__write_to_Make "\t \$(CXX) -c \$(CFLAGS) \$(CPPFLAGS) \$< -o \$@"
+		__write_to_Make "\t \$(CXX) -c \$(CXXFLAGS) \$< -o \$@"
 
         SRC_FILES=$(find . -type f -name "*$FILE_TYPE")
 
@@ -59,13 +58,10 @@ genm() {
         done
 
         __write_to_Make "all: $objs"
-		__write_to_Make "\t \$(CXX) \$^ -o all"
+		__write_to_Make "\t \$(CXX) \$^ -o $Project_Name"
 
         __write_to_Make "clean:"
-		__write_to_Make "\t rm -f *$FILE_TYPE *.o all"
-
-        echo $objs
-
+		__write_to_Make "\t rm -f *$FILE_TYPE *.o $Project_Name"
 
     else
         echo "Path does not exist."
